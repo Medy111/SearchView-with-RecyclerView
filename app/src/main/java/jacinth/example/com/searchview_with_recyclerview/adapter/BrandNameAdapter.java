@@ -16,7 +16,7 @@ import jacinth.example.com.searchview_with_recyclerview.R;
  * Created by Navjacinth Mathew on 5/4/2017.
  */
 
-public class BrandNameAdapter extends RecyclerView.Adapter<BrandNameAdapter.CityViewHolder> implements Filterable {
+public class BrandNameAdapter extends RecyclerView.Adapter<BrandNameAdapter.BrandViewHolder> implements Filterable {
 
     private ArrayList<String> dataList;
     private ArrayList<String> parentList;
@@ -29,14 +29,14 @@ public class BrandNameAdapter extends RecyclerView.Adapter<BrandNameAdapter.City
     }
 
     @Override
-    public CityViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public BrandViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.row_list_item, parent, false);
-        return new CityViewHolder(view);
+        return new BrandViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CityViewHolder holder, int position) {
+    public void onBindViewHolder(BrandViewHolder holder, int position) {
         holder.txtCityname.setText(dataList.get(position));
     }
 
@@ -51,11 +51,11 @@ public class BrandNameAdapter extends RecyclerView.Adapter<BrandNameAdapter.City
     }
 
 
-    class CityViewHolder extends RecyclerView.ViewHolder {
+    class BrandViewHolder extends RecyclerView.ViewHolder {
 
         TextView txtCityname;
 
-        CityViewHolder(View itemView) {
+        BrandViewHolder(View itemView) {
             super(itemView);
             txtCityname = (TextView) itemView.findViewById(R.id.txt_brand_name);
         }
