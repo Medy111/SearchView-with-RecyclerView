@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -16,8 +18,8 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
     private SearchView searchViewBrand;
     private RecyclerView recyclerViewBrand;
-
     private BrandNameAdapter adapter;
+    private TextView txtNoItemMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,11 +27,12 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
         setContentView(R.layout.activity_home);
         initViews();
         getDataAsList();
-        setAdapter();
+        checkList();
     }
 
     private void initViews() {
         searchViewBrand = (SearchView) findViewById(R.id.search_view_brand);
+        txtNoItemMessage = (TextView) findViewById(R.id.txt_no_item_message);
         recyclerViewBrand = (RecyclerView) findViewById(R.id.recycler_view_brand);
 
         searchViewBrand.setOnQueryTextListener(this);
@@ -93,11 +96,28 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
     }
 
     /*Method to initialise and set the adapter*/
-    private void setAdapter() {
-        adapter = new BrandNameAdapter(getDataAsList());
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(HomeActivity.this);
-        recyclerViewBrand.setLayoutManager(layoutManager);
-        recyclerViewBrand.setAdapter(adapter);
+    private void checkList() {
+
+        if (getDataAsList().isEmpty()) {
+            hideList();
+        }
+        else {
+            showList();
+            adapter = new BrandNameAdapter(getDataAsList());
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(HomeActivity.this);
+            recyclerViewBrand.setLayoutManager(layoutManager);
+            recyclerViewBrand.setAdapter(adapter);
+        }
+    }
+
+    private void hideList() {
+        recyclerViewBrand.setVisibility(View.GONE);
+        txtNoItemMessage.setVisibility(View.VISIBLE);
+    }
+
+    private void showList() {
+        recyclerViewBrand.setVisibility(View.VISIBLE);
+        txtNoItemMessage.setVisibility(View.GONE);
     }
 
     @Override
@@ -107,7 +127,10 @@ public class HomeActivity extends AppCompatActivity implements SearchView.OnQuer
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        adapter.getFilter().filter(newText);
+        if (adapter != null) {
+            adapter.getFilter().filter(newText);
+            return false;
+        }
         return false;
     }
 }
