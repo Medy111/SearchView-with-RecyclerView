@@ -1,5 +1,6 @@
 package jacinth.example.com.searchview_with_recyclerview.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,17 +21,20 @@ public class BrandNameAdapter extends RecyclerView.Adapter<BrandNameAdapter.Bran
 
     private ArrayList<String> dataList;
     private ArrayList<String> parentList;
+    private Context context;
 
     public BrandNameAdapter(ArrayList<String> dataList) {
         this.dataList = dataList;
         if (!dataList.isEmpty()) {
             parentList = new ArrayList<>(dataList);
         }
+        dataList.clear();
     }
 
     @Override
     public BrandViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        context = parent.getContext();
+        LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.row_list_item, parent, false);
         return new BrandViewHolder(view);
     }
@@ -47,7 +51,7 @@ public class BrandNameAdapter extends RecyclerView.Adapter<BrandNameAdapter.Bran
 
     @Override
     public Filter getFilter() {
-        return new CityFilter(this, parentList);
+        return new CityFilter(this, parentList, context);
     }
 
 
@@ -69,11 +73,14 @@ public class BrandNameAdapter extends RecyclerView.Adapter<BrandNameAdapter.Bran
 
         private final ArrayList<String> filteredList;
 
-        private CityFilter(BrandNameAdapter adapter, ArrayList<String> originalList) {
+        private Context context;
+
+        private CityFilter(BrandNameAdapter adapter, ArrayList<String> originalList, Context context) {
             super();
             this.adapter = adapter;
             this.originalList = new ArrayList<>(originalList);
             this.filteredList = new ArrayList<>();
+            this.context = context;
         }
 
         @Override
@@ -82,7 +89,7 @@ public class BrandNameAdapter extends RecyclerView.Adapter<BrandNameAdapter.Bran
             final FilterResults results = new FilterResults();
 
             if (constraint.length() == 0) {
-                filteredList.addAll(originalList);
+                //filteredList.addAll(originalList);
             } else {
                 final String filterPattern = constraint.toString().toLowerCase().trim();
 
